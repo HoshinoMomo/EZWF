@@ -11,5 +11,12 @@
 
     <artifactId>com.easyzhang.ezwf.user</artifactId>
 
+<dependencies>
+    <dependency>
+        <groupId>com.easyzhang</groupId>
+        <artifactId>com.easyzhang.ezwf.frame</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
+</dependencies>
 
 </project>
