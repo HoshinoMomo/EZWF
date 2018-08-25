@@ -11,12 +11,32 @@
 
     <artifactId>com.easyzhang.ezwf.user</artifactId>
 
-<dependencies>
-    <dependency>
-        <groupId>com.easyzhang</groupId>
-        <artifactId>com.easyzhang.ezwf.frame</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </dependency>
-</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>com.easyzhang</groupId>
+            <artifactId>com.easyzhang.ezwf.frame</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.9.v20180320</version>
+                <configuration>
+                    <stopPort>9966</stopPort>
+                    <stopKey>foo</stopKey>
+                    <scanIntervalSeconds>0</scanIntervalSeconds>
+                    <webAppConfig>
+                        <contextPath>/</contextPath>
+                        <descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
+                        <defaultsDescriptor>src/test/resources/webdefault.xml
+                        </defaultsDescriptor>
+                    </webAppConfig>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
