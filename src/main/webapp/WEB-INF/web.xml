@@ -6,6 +6,7 @@
     <servlet>
         <servlet-name>dispatcherServlet</servlet-name>
         <servlet-class>com.easyzhang.frame.init.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>dispatcherServlet</servlet-name>

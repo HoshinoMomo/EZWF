@@ -1,4 +1,4 @@
-package com.easyzhang.service.EZShow;
+package com.easyzhang.user.service.ezshow;
 
 /**
  * @author EasyZhang

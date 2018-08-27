@@ -1,8 +1,8 @@
-package com.easyzhang.service.EZShow.impl;
+package com.easyzhang.user.service.ezshow.impl;
 
 
 import com.easyzhang.frame.annotations.EZService;
-import com.easyzhang.service.EZShow.HelloService;
+import com.easyzhang.user.service.ezshow.HelloService;
 
 /**
  * @author EasyZhang

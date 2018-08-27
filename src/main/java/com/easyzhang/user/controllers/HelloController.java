@@ -1,9 +1,9 @@
-package com.easyzhang.controllers;
+package com.easyzhang.user.controllers;
 
 import com.easyzhang.frame.annotations.EZAutowired;
 import com.easyzhang.frame.annotations.EZController;
 import com.easyzhang.frame.annotations.EZRequestMapping;
-import com.easyzhang.service.EZShow.HelloService;
+import com.easyzhang.user.service.ezshow.HelloService;
 
 /**
  * @author EasyZhang
