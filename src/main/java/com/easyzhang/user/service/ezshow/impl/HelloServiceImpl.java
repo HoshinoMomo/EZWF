@@ -11,6 +11,7 @@ import com.easyzhang.user.service.ezshow.HelloService;
 @EZService
 public class HelloServiceImpl implements HelloService{
 
+    @Override
     public String hello() {
         return "hello world from HelloService";
     }

@@ -6,4 +6,6 @@ package com.easyzhang.frame.annotations;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface EZAutowired {
+        boolean required() default true;
+        String value() default "";
 }
