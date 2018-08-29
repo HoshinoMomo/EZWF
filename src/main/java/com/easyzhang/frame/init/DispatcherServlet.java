@@ -122,7 +122,7 @@ public class DispatcherServlet extends HttpServlet {
                     Method[] methods = clazz.getMethods();
                     for(Method method : methods){
                         if(method.isAnnotationPresent(EZRequestMapping.class)){
-                            EZRequestMapping requestMappingM = clazz.getAnnotation(EZRequestMapping.class);
+                            EZRequestMapping requestMappingM = method.getAnnotation(EZRequestMapping.class);
                             String valueM = requestMappingM.value();
                             System.out.println("requestMapping:" + value + valueM);
                             hm.put(value + valueM, method);
@@ -161,7 +161,7 @@ public class DispatcherServlet extends HttpServlet {
                     // 可访问私有属性
                     field.setAccessible(true);
                     if (field.isAnnotationPresent(EZAutowired.class)){
-                        if(!"".equals(field.getAnnotation(EZAutowired.class).value())){
+                        if(field.getAnnotation(EZAutowired.class).value().isEmpty()){
                             Object object = iocmap.get(field.getAnnotation(EZAutowired.class).value());
                             if(Objects.isNull(object)){
                                 throw new Exception(field.getAnnotation(EZAutowired.class).value()+"未初始化");
