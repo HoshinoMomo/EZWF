@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DispatcherServlet extends HttpServlet {
@@ -152,22 +153,28 @@ public class DispatcherServlet extends HttpServlet {
         if(iocmap.isEmpty()){
             return;
         }
-        for(Map.Entry<String,Object> entry : iocmap.entrySet()){
-            // 拿到里面的所有属性
-            Field[] fields = entry.getValue().getClass().getDeclaredFields();
-            for (Field field : fields) {
-                // 可访问私有属性
-                field.setAccessible(true);
-                if (field.isAnnotationPresent(EZAutowired.class)){
-                    try {
-                       Object object = iocmap.get(firstLowerName(field.getType().getSimpleName()));
-                       field.set(entry.getValue(),object);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+        try {
+            for(Map.Entry<String,Object> entry : iocmap.entrySet()){
+                // 拿到里面的所有属性
+                Field[] fields = entry.getValue().getClass().getDeclaredFields();
+                for (Field field : fields) {
+                    // 可访问私有属性
+                    field.setAccessible(true);
+                    if (field.isAnnotationPresent(EZAutowired.class)){
+                        if(!"".equals(field.getAnnotation(EZAutowired.class).value())){
+                            Object object = iocmap.get(field.getAnnotation(EZAutowired.class).value());
+                            if(Objects.isNull(object)){
+                                throw new Exception(field.getAnnotation(EZAutowired.class).value()+"未初始化");
+                            }
+                            field.set(entry.getValue(),object);
+                        }else {
+                            Object object = iocmap.get(firstLowerName(field.getType().getSimpleName()));
+                            field.set(entry.getValue(),object); }
                     }
                 }
-
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
