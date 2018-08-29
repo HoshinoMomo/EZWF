@@ -11,4 +11,10 @@ public interface HelloService {
      * @return
      */
     String hello();
+
+    /**
+     * say china
+     * @return
+     */
+    String china(String user);
 }

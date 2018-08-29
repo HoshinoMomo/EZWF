@@ -15,4 +15,9 @@ public class HelloServiceImpl implements HelloService{
     public String hello() {
         return "hello world from HelloService";
     }
+
+    @Override
+    public String china(String user) {
+        return "hello world "+user;
+    }
 }

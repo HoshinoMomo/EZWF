@@ -2,6 +2,7 @@ package com.easyzhang.user.controllers;
 
 import com.easyzhang.frame.annotations.EZAutowired;
 import com.easyzhang.frame.annotations.EZController;
+import com.easyzhang.frame.annotations.EZParam;
 import com.easyzhang.frame.annotations.EZRequestMapping;
 import com.easyzhang.user.service.ezshow.HelloService;
 
@@ -19,6 +20,11 @@ public class HelloController {
     @EZRequestMapping("/world")
     public String world(){
         return helloService.hello();
+    }
+
+    @EZRequestMapping("/china")
+    public String china(@EZParam("user") String user){
+        return helloService.china(user);
     }
 
 }

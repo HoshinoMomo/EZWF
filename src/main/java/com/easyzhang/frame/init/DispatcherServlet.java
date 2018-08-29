@@ -2,6 +2,7 @@ package com.easyzhang.frame.init;
 
 import com.easyzhang.frame.annotations.EZAutowired;
 import com.easyzhang.frame.annotations.EZController;
+import com.easyzhang.frame.annotations.EZParam;
 import com.easyzhang.frame.annotations.EZRequestMapping;
 import com.easyzhang.frame.annotations.EZService;
 
@@ -17,6 +18,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,15 +75,41 @@ public class DispatcherServlet extends HttpServlet {
 
         iocmap.size();
         Method method = hm.get(finallyUrl);
+        if(Objects.isNull(method)){
+            return;
+        }
         try {
-           Object o = method.invoke(iocmap.get(firstLowerName(method.getDeclaringClass().getSimpleName())));
-           PrintWriter objectOutputStream = resp.getWriter();
-           objectOutputStream.print(o);
-           objectOutputStream.close();
+            Parameter[] parameters = method.getParameters();
+            List<Object> paramValue = new ArrayList<>();
+            for (Parameter parameter : parameters) {
+                // 当前参数有别名注解并且别名不为空
+                if(parameter.isAnnotationPresent(EZParam.class) && !parameter.getAnnotation(EZParam.class).value().isEmpty()){
+                    // 我们获取
+                    String value = req.getParameter(parameter.getAnnotation(EZParam.class).value());
+                    paramValue.add(value);
+                }else if (parameter.getParameterizedType().getTypeName().contains("HttpServletRequest")) {
+                    paramValue.add(req);
+                }else if (parameter.getParameterizedType().getTypeName().contains("HttpServletResponse")) {
+                    paramValue.add(resp);
+                }else{
+                    paramValue.add(null);
+                }
+            }
+            if(parameters.length==0){
+                Object o = method.invoke(iocmap.get(firstLowerName(method.getDeclaringClass().getSimpleName())));
+                PrintWriter objectOutputStream = resp.getWriter();
+                objectOutputStream.print(o);
+                objectOutputStream.close();
+            }else {
+                Object o = method.invoke(iocmap.get(firstLowerName(method.getDeclaringClass().getSimpleName())),paramValue.toArray());
+                PrintWriter objectOutputStream = resp.getWriter();
+                objectOutputStream.print(o);
+                objectOutputStream.close();
+            }
+
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -161,7 +189,7 @@ public class DispatcherServlet extends HttpServlet {
                     // 可访问私有属性
                     field.setAccessible(true);
                     if (field.isAnnotationPresent(EZAutowired.class)){
-                        if(field.getAnnotation(EZAutowired.class).value().isEmpty()){
+                        if(!field.getAnnotation(EZAutowired.class).value().isEmpty()){
                             Object object = iocmap.get(field.getAnnotation(EZAutowired.class).value());
                             if(Objects.isNull(object)){
                                 throw new Exception(field.getAnnotation(EZAutowired.class).value()+"未初始化");
